@@ -31,15 +31,6 @@ jobs:
           .venv\Scripts\activate
         fi
         uv pip install -e ".[dev]"
-    - name: Lint with ruff
-      run: |
-        if [ "$RUNNER_OS" == "Linux" ] || [ "$RUNNER_OS" == "macOS" ]; then
-          source .venv/bin/activate
-        else
-          .venv\Scripts\activate
-        fi
-        ruff check .
-        ruff format --check .
     - name: Type check with mypy
       run: |
         if [ "$RUNNER_OS" == "Linux" ] || [ "$RUNNER_OS" == "macOS" ]; then

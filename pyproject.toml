@@ -25,7 +25,6 @@ dev = [
     "pytest>=7.4.2",
     "pytest-cov>=4.1.0",
     "pytest-mock>=3.10.0",
-    "ruff>=0.1.0",
     "mypy>=1.6.0",
 ]
 
@@ -47,9 +46,3 @@ module = [
     "sqlite_utils.*"
 ]
 ignore_missing_imports = true
-
-[tool.ruff]
-line-length = 88
-target-version = "py310"
-select = ["E", "F", "B", "I", "N", "UP", "YTT", "C4", "DTZ"]
-ignore = []

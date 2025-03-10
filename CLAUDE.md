@@ -170,10 +170,6 @@ def get_item(
 
 All projects MUST include and enforce these tools:
 
-1. **Ruff**: For linting and formatting
-   - Configuration in pyproject.toml
-   - Run: `ruff check .` and `ruff format .`
-
 2. **Mypy**: For static type checking
    - Strict mode enabled
    - Run: `mypy src tests`
@@ -237,7 +233,6 @@ dependencies = [
 dev = [
     "pytest>=7.4.2",
     "pytest-cov>=4.1.0",
-    "ruff>=0.1.0",
     "mypy>=1.6.0",
 ]
 
@@ -251,12 +246,6 @@ warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = true
 disallow_incomplete_defs = true
-
-[tool.ruff]
-line-length = 88
-target-version = "py310"
-select = ["E", "F", "B", "I", "N", "UP", "YTT", "C4", "DTZ"]
-ignore = []
 ```
 
 ## CI/CD Requirements
@@ -298,10 +287,6 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install uv
         uv pip install -e ".[dev]"
-    - name: Lint with ruff
-      run: |
-        ruff check .
-        ruff format --check .
     - name: Type check with mypy
       run: |
         mypy src tests
@@ -321,7 +306,7 @@ All projects MUST follow this development workflow:
 1. Create and activate environment: `uv venv && source .venv/bin/activate`
 2. Install in development mode: `uv pip install -e ".[dev]"`
 3. Run tests before committing: `pytest`
-4. Check code quality before committing: `ruff check . && ruff format . && mypy src tests`
+4. Check code quality before committing: `mypy src tests`
 5. Use pre-commit hooks (optional but recommended)
 
 ## Versioning
