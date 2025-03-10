@@ -25,7 +25,7 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install uv
         uv venv
-        if [ "$RUNNER_OS" == "Linux" ] || [ "$RUNNER_OS" == "macOS" ]; then
+        if [[ "$RUNNER_OS" == "Linux" || "$RUNNER_OS" == "macOS" ]]; then
           source .venv/bin/activate
         else
           .venv\Scripts\activate
@@ -33,7 +33,7 @@ jobs:
         uv pip install -e ".[dev]"
     - name: Type check with mypy
       run: |
-        if [ "$RUNNER_OS" == "Linux" ] || [ "$RUNNER_OS" == "macOS" ]; then
+        if [[ "$RUNNER_OS" == "Linux" || "$RUNNER_OS" == "macOS" ]]; then
           source .venv/bin/activate
         else
           .venv\Scripts\activate
@@ -41,7 +41,7 @@ jobs:
         mypy src tests
     - name: Test with pytest
       run: |
-        if [ "$RUNNER_OS" == "Linux" ] || [ "$RUNNER_OS" == "macOS" ]; then
+        if [[ "$RUNNER_OS" == "Linux" || "$RUNNER_OS" == "macOS" ]]; then
           source .venv/bin/activate
         else
           .venv\Scripts\activate
