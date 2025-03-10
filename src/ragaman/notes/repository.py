@@ -1,10 +1,6 @@
 """Repository for storing and retrieving notes."""
 import json
-import os
-import sqlite3
 from datetime import datetime
-from pathlib import Path
-from typing import List, Optional, Tuple
 
 import numpy as np
 import sqlite_utils.db
@@ -20,7 +16,7 @@ class NoteRepository:
     def __init__(
         self,
         db_path: str = "notes.db",
-        embedder: Optional[OpenAIEmbedder] = None,
+        embedder: OpenAIEmbedder | None = None,
         create_tables: bool = True,
     ) -> None:
         """Initialize the repository.
@@ -60,10 +56,18 @@ class NoteRepository:
         Returns:
             The ID of the newly added note
         """
+        # Ensure note has an embedding
         if note.embedding is None:
             note.embedding = self.embedder.embed_text(note.content)
         
-        row = self.db["notes"].insert(
+        # Ensure note has a creation time
+        if note.created_at is None:
+            from datetime import timezone
+            note.created_at = datetime.now(timezone.utc).replace(tzinfo=None)
+            
+        # Type ignore needed for sqlite_utils Table/View union type
+        # mypy doesn't correctly recognize table.insert() is valid
+        self.db["notes"].insert(  # type: ignore
             {
                 "content": note.content,
                 "created_at": note.created_at.isoformat(),
@@ -72,10 +76,13 @@ class NoteRepository:
             pk="id",
         )
         
-        # Return the last_rowid which is the ID of the newly inserted note
-        return self.db.conn.execute("SELECT last_insert_rowid()").fetchone()[0]
+        # Get and return the last inserted row ID
+        result = self.db.conn.execute("SELECT last_insert_rowid()").fetchone()
+        if result is not None and len(result) > 0:
+            return int(result[0])
+        raise ValueError("Failed to get ID for newly inserted note")
 
-    def get_all_notes(self) -> List[Note]:
+    def get_all_notes(self) -> list[Note]:
         """Retrieve all notes.
 
         Returns:
@@ -88,12 +95,14 @@ class NoteRepository:
                     id=row["id"],
                     content=row["content"],
                     created_at=datetime.fromisoformat(row["created_at"]),
-                    embedding=json.loads(row["embedding"]) if row["embedding"] else None,
+                    embedding=(
+                        json.loads(row["embedding"]) if row["embedding"] else None
+                    ),
                 )
             )
         return notes
 
-    def get_note_by_id(self, note_id: int) -> Optional[Note]:
+    def get_note_by_id(self, note_id: int) -> Note | None:
         """Retrieve a note by ID.
 
         Args:
@@ -103,7 +112,8 @@ class NoteRepository:
             The note if found, None otherwise
         """
         try:
-            row = self.db["notes"].get(note_id)
+            # Type ignore needed for sqlite_utils Table/View union type
+            row = self.db["notes"].get(note_id)  # type: ignore
             return Note(
                 id=row["id"],
                 content=row["content"],
@@ -113,7 +123,7 @@ class NoteRepository:
         except sqlite_utils.db.NotFoundError:
             return None
 
-    def search_similar(self, query: str, limit: int = 5) -> List[Tuple[Note, float]]:
+    def search_similar(self, query: str, limit: int = 5) -> list[tuple[Note, float]]:
         """Search for notes similar to the query text.
 
         Args:
@@ -152,7 +162,8 @@ class NoteRepository:
             return False
             
         try:
-            self.db["notes"].delete(note_id)
+            # Type ignore needed for sqlite_utils Table/View union type
+            self.db["notes"].delete(note_id)  # type: ignore
             return True
         except sqlite_utils.db.NotFoundError:
             return False

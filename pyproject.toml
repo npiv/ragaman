@@ -15,6 +15,9 @@ dependencies = [
     "openai>=1.0.0",
     "sqlite-utils>=3.30",
     "numpy>=1.24.0",
+    "fastapi>=0.100.0",
+    "uvicorn>=0.22.0",
+    "pydantic>=2.0.0",
 ]
 
 [project.optional-dependencies]
@@ -36,6 +39,14 @@ warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = true
 disallow_incomplete_defs = true
+
+[[tool.mypy.overrides]]
+module = [
+    "fastapi.*",
+    "uvicorn.*",
+    "sqlite_utils.*"
+]
+ignore_missing_imports = true
 
 [tool.ruff]
 line-length = 88
