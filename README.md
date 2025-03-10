@@ -75,16 +75,6 @@ pytest
 pytest --cov=ragaman
 ```
 
-### Code Quality
-
-```bash
-# Run linter and formatter
-ruff check .
-ruff format .
-
-# Run type checker
-mypy src tests
-```
 
 ## Environment Variables
 

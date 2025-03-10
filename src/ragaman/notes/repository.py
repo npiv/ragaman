@@ -29,7 +29,7 @@ class NoteRepository:
         self.db_path = db_path
         self.embedder = embedder or OpenAIEmbedder()
         self.db = Database(self.db_path)
-        
+
         if create_tables:
             self._create_tables()
 
@@ -59,15 +59,14 @@ class NoteRepository:
         # Ensure note has an embedding
         if note.embedding is None:
             note.embedding = self.embedder.embed_text(note.content)
-        
+
         # Ensure note has a creation time
         if note.created_at is None:
             from datetime import timezone
             note.created_at = datetime.now(timezone.utc).replace(tzinfo=None)
-            
+
         # Type ignore needed for sqlite_utils Table/View union type
-        # mypy doesn't correctly recognize table.insert() is valid
-        self.db["notes"].insert(  # type: ignore
+        self.db["notes"].insert(
             {
                 "content": note.content,
                 "created_at": note.created_at.isoformat(),
@@ -75,7 +74,7 @@ class NoteRepository:
             },
             pk="id",
         )
-        
+
         # Get and return the last inserted row ID
         result = self.db.conn.execute("SELECT last_insert_rowid()").fetchone()
         if result is not None and len(result) > 0:
@@ -134,7 +133,7 @@ class NoteRepository:
             List of (note, similarity_score) tuples, sorted by decreasing similarity
         """
         query_embedding = self.embedder.embed_text(query)
-        
+
         results = []
         for note in self.get_all_notes():
             if note.embedding:
@@ -143,10 +142,10 @@ class NoteRepository:
                     np.linalg.norm(query_embedding) * np.linalg.norm(note.embedding)
                 )
                 results.append((note, float(similarity)))
-        
+
         # Sort by similarity score in descending order
         results.sort(key=lambda x: x[1], reverse=True)
-        
+
         return results[:limit]
 
     def delete_note(self, note_id: int) -> bool:
@@ -160,7 +159,7 @@ class NoteRepository:
         """
         if not self.get_note_by_id(note_id):
             return False
-            
+
         try:
             # Type ignore needed for sqlite_utils Table/View union type
             self.db["notes"].delete(note_id)  # type: ignore

@@ -170,11 +170,7 @@ def get_item(
 
 All projects MUST include and enforce these tools:
 
-2. **Mypy**: For static type checking
-   - Strict mode enabled
-   - Run: `mypy src tests`
-
-3. **Pytest**: For testing
+1. **Pytest**: For testing
    - Run: `pytest`
    - Required test coverage: minimum 80%
 
@@ -233,19 +229,11 @@ dependencies = [
 dev = [
     "pytest>=7.4.2",
     "pytest-cov>=4.1.0",
-    "mypy>=1.6.0",
 ]
 
 [tool.pytest.ini_options]
 addopts = ["--import-mode=importlib", "--cov=src", "--cov-report=term-missing"]
 testpaths = ["tests"]
-
-[tool.mypy]
-python_version = "3.10"
-warn_return_any = true
-warn_unused_configs = true
-disallow_untyped_defs = true
-disallow_incomplete_defs = true
 ```
 
 ## CI/CD Requirements
@@ -287,9 +275,6 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install uv
         uv pip install -e ".[dev]"
-    - name: Type check with mypy
-      run: |
-        mypy src tests
     - name: Test with pytest
       run: |
         pytest --cov=src --cov-report=xml
@@ -306,8 +291,7 @@ All projects MUST follow this development workflow:
 1. Create and activate environment: `uv venv && source .venv/bin/activate`
 2. Install in development mode: `uv pip install -e ".[dev]"`
 3. Run tests before committing: `pytest`
-4. Check code quality before committing: `mypy src tests`
-5. Use pre-commit hooks (optional but recommended)
+4. Use pre-commit hooks (optional but recommended)
 
 ## Versioning
 

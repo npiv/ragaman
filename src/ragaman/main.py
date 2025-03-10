@@ -57,10 +57,8 @@ def create_app() -> FastAPI:
         # Add any custom modifications to OpenAPI schema here
 
         app.openapi_schema = openapi_schema
-        # Type casting to satisfy mypy - FastAPI internally manages this correctly
-        return dict(app.openapi_schema)
+        return app.openapi_schema
 
-    # Using _set_openapi method to avoid mypy error
     setattr(app, "openapi", custom_openapi)
 
     return app
