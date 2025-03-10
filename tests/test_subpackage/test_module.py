@@ -2,7 +2,7 @@
 
 import pytest
 
-from ragaman.subpackage.module import example_function
+from ragaman.subpackage.module import example_function  # type: ignore
 
 
 def test_example_function() -> None:

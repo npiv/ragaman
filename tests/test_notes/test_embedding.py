@@ -7,14 +7,14 @@ import pytest
 from ragaman.notes.embedding import OpenAIEmbedder
 
 
-def test_embedder_requires_api_key():
+def test_embedder_requires_api_key() -> None:
     """Test that embedder raises error when no API key is provided."""
     with patch.dict(os.environ, {}, clear=True):
         with pytest.raises(ValueError, match="OpenAI API key is required"):
             OpenAIEmbedder()
 
 
-def test_embedder_uses_environment_api_key():
+def test_embedder_uses_environment_api_key() -> None:
     """Test that embedder uses API key from environment."""
     with patch.dict(os.environ, {"OPENAI_API_KEY": "test_key"}, clear=True):
         with patch("openai.OpenAI"):
@@ -22,14 +22,14 @@ def test_embedder_uses_environment_api_key():
             assert embedder.api_key == "test_key"
 
 
-def test_embedder_uses_provided_api_key():
+def test_embedder_uses_provided_api_key() -> None:
     """Test that embedder uses provided API key."""
     with patch("openai.OpenAI"):
         embedder = OpenAIEmbedder(api_key="provided_key")
         assert embedder.api_key == "provided_key"
 
 
-def test_embed_text_returns_embedding(mocker):
+def test_embed_text_returns_embedding(mocker: object) -> None:
     """Test that embed_text returns embedding from OpenAI API."""
     # Create mock response
     mock_embedding = [0.1, 0.2, 0.3]

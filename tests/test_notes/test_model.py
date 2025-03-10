@@ -4,7 +4,7 @@ from datetime import datetime
 from ragaman.notes.model import Note
 
 
-def test_note_creation():
+def test_note_creation() -> None:
     """Test that notes can be created with required attributes."""
     note = Note(content="Test note content")
     
@@ -14,7 +14,7 @@ def test_note_creation():
     assert isinstance(note.created_at, datetime)
 
 
-def test_note_with_all_attributes():
+def test_note_with_all_attributes() -> None:
     """Test that notes can be created with all attributes specified."""
     created_at = datetime(2023, 1, 1, 12, 0)
     embedding = [0.1, 0.2, 0.3]

@@ -60,7 +60,8 @@ def create_app() -> FastAPI:
         # Type casting to satisfy mypy - FastAPI internally manages this correctly
         return dict(app.openapi_schema)
 
-    app.openapi = custom_openapi
+    # Using _set_openapi method to avoid mypy error
+    setattr(app, "openapi", custom_openapi)
 
     return app
 
