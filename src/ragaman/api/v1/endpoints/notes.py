@@ -57,8 +57,7 @@ def create_note(
         id=created_note.id,
         content=created_note.content,
         created_at=(created_note.created_at if created_note.created_at is not None 
-                 else datetime.now(timezone.utc).replace(tzinfo=None)),
-        embedding=created_note.embedding
+                 else datetime.now(timezone.utc).replace(tzinfo=None))
     )
 
 
@@ -85,8 +84,7 @@ def get_all_notes(
             id=note.id if note.id is not None else 0,  # Should never happen in practice
             content=note.content,
             created_at=(note.created_at if note.created_at is not None 
-                       else datetime.now(timezone.utc).replace(tzinfo=None)),
-            embedding=note.embedding
+                       else datetime.now(timezone.utc).replace(tzinfo=None))
         )
         for note in notes
         if note.id is not None  # Filter out notes without IDs
@@ -134,8 +132,7 @@ def get_note(
         id=note.id,
         content=note.content,
         created_at=(note.created_at if note.created_at is not None 
-                   else datetime.now(timezone.utc).replace(tzinfo=None)),
-        embedding=note.embedding
+                   else datetime.now(timezone.utc).replace(tzinfo=None))
     )
 
 
@@ -195,8 +192,7 @@ def search_notes(
                 id=note.id if note.id is not None else 0,
                 content=note.content,
                 created_at=(note.created_at if note.created_at is not None 
-                           else datetime.now(timezone.utc).replace(tzinfo=None)),
-                embedding=note.embedding
+                           else datetime.now(timezone.utc).replace(tzinfo=None))
             ),
             similarity=score
         )

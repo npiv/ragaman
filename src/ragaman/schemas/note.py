@@ -21,19 +21,16 @@ class NoteResponse(NoteBase):
 
     id: int = Field(..., description="The ID of the note")
     created_at: datetime = Field(..., description="Creation timestamp")
-    embedding: list[float] | None = Field(None, description="Vector embedding")
 
-    class Config:
-        """Pydantic configuration."""
-
-        schema_extra = {
+    model_config = {
+        "json_schema_extra": {
             "example": {
                 "id": 1,
                 "content": "This is a sample note about RAG models.",
-                "created_at": "2023-01-01T12:00:00",
-                "embedding": None
+                "created_at": "2023-01-01T12:00:00"
             }
         }
+    }
 
 
 class SearchQuery(BaseModel):
@@ -42,15 +39,14 @@ class SearchQuery(BaseModel):
     query: str = Field(..., description="The search query text")
     limit: int = Field(5, description="Maximum number of results to return")
 
-    class Config:
-        """Pydantic configuration."""
-
-        schema_extra = {
+    model_config = {
+        "json_schema_extra": {
             "example": {
                 "query": "RAG models",
                 "limit": 5
             }
         }
+    }
 
 
 class SearchResult(BaseModel):
@@ -59,17 +55,15 @@ class SearchResult(BaseModel):
     note: NoteResponse
     similarity: float = Field(..., description="Similarity score between 0 and 1")
 
-    class Config:
-        """Pydantic configuration."""
-
-        schema_extra = {
+    model_config = {
+        "json_schema_extra": {
             "example": {
                 "note": {
                     "id": 1,
                     "content": "This is a sample note about RAG models.",
-                    "created_at": "2023-01-01T12:00:00",
-                    "embedding": None
+                    "created_at": "2023-01-01T12:00:00"
                 },
                 "similarity": 0.89
             }
         }
+    }
