@@ -20,6 +20,7 @@ dependencies = [
     "pydantic>=2.0.0",
     "mcp-python>=0.1.4",
     "httpx>=0.25.0",
+    "typer"
 ]
 
 [project.optional-dependencies]
