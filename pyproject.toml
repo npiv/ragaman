@@ -30,5 +30,3 @@ dev = [
 [tool.pytest.ini_options]
 addopts = ["--import-mode=importlib", "--cov=src", "--cov-report=term-missing"]
 testpaths = ["tests"]
-
-ignore_missing_imports = true
