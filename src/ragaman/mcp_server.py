@@ -20,8 +20,13 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Get repository instance
-repo = get_repository()
+# Get repository with embedder
+from ragaman.notes.embedding import OpenAIEmbedder
+embedder = OpenAIEmbedder(
+    api_key=settings.openai_api_key,
+    model=settings.embedding_model
+)
+repo = get_repository(embedder=embedder)
 
 
 def _format_note(note: Note) -> str:
