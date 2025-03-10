@@ -53,3 +53,7 @@ venv.bak/
 
 # Project specific
 .DS_Store
+Thumbs.db
+notes.db
+*.sqlite
+*.sqlite3

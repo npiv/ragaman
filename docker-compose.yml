@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "${HOST_PORT:-8000}:8000"
+    volumes:
+      - ./notes.db:/app/notes.db
+      - ./src:/app/src  # For development mode with live reload
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - APP_NAME=${APP_NAME:-Ragaman API}
+      - API_VERSION=${API_VERSION:-v1}
+      - DB_PATH=${DB_PATH:-notes.db}
+      - EMBEDDING_MODEL=${EMBEDDING_MODEL:-text-embedding-3-small}
+      - HOST=0.0.0.0  # Bind to all interfaces in Docker
+      - PORT=8000
+    restart: unless-stopped
