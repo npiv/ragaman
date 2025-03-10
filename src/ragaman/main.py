@@ -1,4 +1,5 @@
 """Main module for ragaman."""
+import argparse
 import logging
 
 import uvicorn
@@ -8,6 +9,7 @@ from fastapi.openapi.utils import get_openapi
 
 from ragaman.api.v1.router import api_router
 from ragaman.core.config import settings
+from ragaman.mcp_server import run_mcp_server
 
 logging.basicConfig(
     level=logging.INFO,
@@ -64,8 +66,8 @@ def create_app() -> FastAPI:
     return app
 
 
-def main() -> None:
-    """Run the main program."""
+def run_api_server() -> None:
+    """Run the FastAPI server."""
     logger.info("Starting Ragaman API server")
     uvicorn.run(
         "ragaman.main:create_app",
@@ -74,6 +76,32 @@ def main() -> None:
         factory=True,
         reload=True,
     )
+
+
+def main() -> None:
+    """Run the main program with option to start API or MCP server."""
+    parser = argparse.ArgumentParser(description="Ragaman - RAG system for notes")
+    parser.add_argument(
+        "--mode", 
+        type=str, 
+        choices=["api", "mcp"], 
+        default="api",
+        help="Server mode: 'api' for FastAPI server, 'mcp' for MCP server"
+    )
+    parser.add_argument(
+        "--transport", 
+        type=str, 
+        choices=["stdio", "http"], 
+        default="stdio",
+        help="MCP transport method (only used when mode=mcp)"
+    )
+    
+    args = parser.parse_args()
+    
+    if args.mode == "api":
+        run_api_server()
+    elif args.mode == "mcp":
+        run_mcp_server(transport=args.transport)
 
 
 if __name__ == "__main__":
