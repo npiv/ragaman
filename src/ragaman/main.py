@@ -85,7 +85,7 @@ def main() -> None:
         "--mode", 
         type=str, 
         choices=["api", "mcp"], 
-        default="api",
+        default="mcp",
         help="Server mode: 'api' for FastAPI server, 'mcp' for MCP server"
     )
     parser.add_argument(
