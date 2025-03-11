@@ -18,6 +18,9 @@ dependencies = [
     "fastapi>=0.100.0",
     "uvicorn>=0.22.0",
     "pydantic>=2.0.0",
+    "mcp-python>=0.1.4",
+    "httpx>=0.25.0",
+    "typer"
 ]
 
 [project.optional-dependencies]
@@ -30,3 +33,6 @@ dev = [
 [tool.pytest.ini_options]
 addopts = ["--import-mode=importlib", "--cov=src", "--cov-report=term-missing"]
 testpaths = ["tests"]
+
+[project.scripts]
+ragaman = "ragaman.main:main"

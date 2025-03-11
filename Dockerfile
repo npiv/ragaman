@@ -16,9 +16,11 @@ COPY src/ ./src/
 
 # Copy required files
 COPY README.md ./
+COPY docs/ ./docs/
 
-# Expose the port the app runs on
-EXPOSE 8000
+# Expose ports
+EXPOSE 8000  # API port
+EXPOSE 8080  # MCP HTTP port
 
-# Command to run the application
+# Command will be overridden in docker-compose.yml
 CMD ["python", "-m", "ragaman.main"]
