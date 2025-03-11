@@ -5,7 +5,6 @@ from typing import List, Optional
 
 from mcp.server.fastmcp import FastMCP
 
-from ragaman.api.dependencies import get_repository
 from ragaman.core.config import settings
 from ragaman.notes.model import Note
 from ragaman.notes.repository import NoteRepository
@@ -26,8 +25,11 @@ embedder = OpenAIEmbedder(
     api_key=settings.openai_api_key,
     model=settings.embedding_model
 )
-repo = get_repository(embedder=embedder)
-
+repo = NoteRepository(
+        db_path=settings.db_path,
+        embedder=embedder,
+        create_tables=True
+    )
 
 def _format_note(note: Note) -> str:
     """Format a note into a readable string.
